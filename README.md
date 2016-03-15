@@ -58,6 +58,8 @@ class AddWeightToItem < ActiveRecord::Migration
 end
 
 class Item < ActiveRecord::Base
+  include Weighable::Model
+
   weighable :my_weight
 
   # OR require the field to be present
