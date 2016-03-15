@@ -58,6 +58,8 @@ class AddWeightToItem < ActiveRecord::Migration
 end
 
 class Item < ActiveRecord::Base
+  include Weighable::Model
+
   weighable :my_weight
 
   # OR require the field to be present
@@ -81,7 +83,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/weighable.
+Bug reports and pull requests are welcome on GitHub at https://github.com/greenbits/weighable.
 
 ## License
 

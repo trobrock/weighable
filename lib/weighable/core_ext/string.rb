@@ -1,4 +1,4 @@
-require 'weighable/core_ext/inflections'
+require 'weighable/inflections'
 
 class String
   Weighable::Weight::UNIT.each do |unit, _|
