@@ -1,3 +1,5 @@
+require 'weighable/inflections'
+
 module Weighable
   class Weight
     attr_reader :value, :unit
@@ -69,16 +71,19 @@ module Weighable
     end
 
     def to(unit)
-      new_unit = unit_from_symbol(unit)
+      new_unit = unit.is_a?(Fixnum) ? unit : unit_from_symbol(unit.to_sym)
       operator, conversion = conversion(@unit, new_unit)
       new_value = @value.public_send(operator, conversion)
       Weight.new(new_value, unit)
     end
 
     UNIT.keys.each do |unit|
+      unit = unit.to_s
       define_method "to_#{unit}" do
         to(unit)
       end
+      plural = ActiveSupport::Inflector.pluralize(unit)
+      alias_method "to_#{plural}", "to_#{unit}" unless unit == plural
     end
 
     def ==(other)
