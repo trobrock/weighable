@@ -5,12 +5,12 @@ module Weighable
     attr_reader :value, :unit
 
     UNIT = {
-      each:      0,
-      gram:      1,
-      ounce:     2,
-      pound:     3,
-      milligram: 4,
-      kilogram:  5
+      gram:      0,
+      ounce:     1,
+      pound:     2,
+      milligram: 3,
+      kilogram:  4,
+      each:      5
     }.freeze
 
     GRAMS_PER_OUNCE     = BigDecimal.new('28.34952')
@@ -27,7 +27,9 @@ module Weighable
     KILOGRAMS_PER_MILLIGRAM = MILLIGRAMS_PER_GRAM**2
 
     CONVERSIONS = {
-      UNIT[:each] => {}, # TODO: Write tests
+      UNIT[:each] => {
+        UNIT[:each] => [:*, IDENTITY]
+      },
       UNIT[:gram] => {
         UNIT[:gram]      => [:*, IDENTITY],
         UNIT[:ounce]     => [:/, GRAMS_PER_OUNCE],
@@ -133,7 +135,9 @@ module Weighable
 
     def conversion(from, to)
       conversion = CONVERSIONS[from][to]
-      fail "no conversion from #{unit_from_int(from)} to #{unit_from_int(to)}" unless conversion
+      unless conversion
+        fail NoConversionError, "no conversion from #{unit_from_int(from)} to #{unit_from_int(to)}"
+      end
       conversion
     end
   end
