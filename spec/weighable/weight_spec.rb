@@ -3,10 +3,11 @@ require 'spec_helper'
 module Weighable
   describe Weight do
     it 'should know all of the units' do
-      expect(Weight::UNIT).to eq(each: 0, gram: 1, ounce: 2, pound: 3, milligram: 4, kilogram: 5)
+      expect(Weight::UNIT).to eq(gram: 0, ounce: 1, pound: 2, milligram: 3, kilogram: 4, each: 5)
     end
 
     context 'math' do
+      let(:weight_each) { Weight.new(1, :each) }
       let(:weight_gram) { Weight.new(1.2, :gram) }
       let(:weight_ounce) { Weight.new(1, :ounce) }
 
@@ -18,6 +19,11 @@ module Weighable
         it 'two unlike weights' do
           expect(weight_gram + weight_ounce).to eq(Weight.new(BigDecimal.new('29.54952'), :gram))
         end
+
+        it 'two unlike unit types' do
+          expect { weight_each + weight_gram }.to raise_error(NoConversionError)
+          expect { weight_gram + weight_each }.to raise_error(NoConversionError)
+        end
       end
 
       context 'subtracting' do
@@ -27,6 +33,11 @@ module Weighable
 
         it 'two unlike weights' do
           expect(weight_gram - weight_ounce).to eq(Weight.new(BigDecimal.new('-27.14952'), :gram))
+        end
+
+        it 'two unlike unit types' do
+          expect { weight_each - weight_gram }.to raise_error(NoConversionError)
+          expect { weight_gram - weight_each }.to raise_error(NoConversionError)
         end
       end
 
@@ -38,6 +49,11 @@ module Weighable
         it 'two unlike weights' do
           expect(weight_gram * weight_ounce).to eq(Weight.new(BigDecimal.new('34.019424'), :gram))
         end
+
+        it 'two unlike unit types' do
+          expect { weight_each * weight_gram }.to raise_error(NoConversionError)
+          expect { weight_gram * weight_each }.to raise_error(NoConversionError)
+        end
       end
 
       context 'dividing' do
@@ -48,6 +64,11 @@ module Weighable
         it 'two unlike weights' do
           expect((weight_gram / weight_ounce).round(9))
             .to eq(Weight.new(BigDecimal.new('0.042328759'), :gram))
+        end
+
+        it 'two unlike unit types' do
+          expect { weight_each / weight_gram }.to raise_error(NoConversionError)
+          expect { weight_gram / weight_each }.to raise_error(NoConversionError)
         end
       end
     end
@@ -101,6 +122,10 @@ module Weighable
         expect(weight.to_kilogram).to eq(Weight.new(kilogram, :kilogram))
         expect(weight.to(:kilogram).value.round(9)).to eq(BigDecimal.new('0.001'))
       end
+
+      it 'does not convert to each' do
+        expect { weight.to(:each) }.to raise_error(NoConversionError)
+      end
     end
 
     context 'from ounce' do
@@ -139,6 +164,10 @@ module Weighable
         expect(weight.to(:kilogram)).to eq(Weight.new(kilogram, :kilogram))
         expect(weight.to_kilogram).to eq(Weight.new(kilogram, :kilogram))
         expect(weight.to(:kilogram).value.round(9)).to eq(BigDecimal.new('0.02834952'))
+      end
+
+      it 'does not convert to each' do
+        expect { weight.to(:each) }.to raise_error(NoConversionError)
       end
     end
 
@@ -179,6 +208,10 @@ module Weighable
         expect(weight.to_kilogram).to eq(Weight.new(kilogram, :kilogram))
         expect(weight.to(:kilogram).value.round(9)).to eq(BigDecimal.new('0.45359237'))
       end
+
+      it 'does not convert to each' do
+        expect { weight.to(:each) }.to raise_error(NoConversionError)
+      end
     end
 
     context 'from milligram' do
@@ -218,6 +251,10 @@ module Weighable
         expect(weight.to_kilogram).to eq(Weight.new(kilogram, :kilogram))
         expect(weight.to(:kilogram).value.round(9)).to eq(BigDecimal.new('0.000001'))
       end
+
+      it 'does not convert to each' do
+        expect { weight.to(:each) }.to raise_error(NoConversionError)
+      end
     end
 
     context 'from kilogram' do
@@ -256,6 +293,41 @@ module Weighable
         expect(weight.to(:kilogram)).to eq(Weight.new(kilogram, :kilogram))
         expect(weight.to_kilogram).to eq(Weight.new(kilogram, :kilogram))
         expect(weight.to(:kilogram).value.round(9)).to eq(BigDecimal.new('1'))
+      end
+
+      it 'does not convert to each' do
+        expect { weight.to(:each) }.to raise_error(NoConversionError)
+      end
+    end
+
+    context 'from each' do
+      let(:weight) { Weight.new(1, :each) }
+
+      it 'does not convert to gram' do
+        expect { weight.to(:gram) }.to raise_error(NoConversionError)
+      end
+
+      it 'does not convert to ounce' do
+        expect { weight.to(:ounce) }.to raise_error(NoConversionError)
+      end
+
+      it 'does not convert to pound' do
+        expect { weight.to(:pound) }.to raise_error(NoConversionError)
+      end
+
+      it 'does not convert to milligram' do
+        expect { weight.to(:milligram) }.to raise_error(NoConversionError)
+      end
+
+      it 'does not convert to kilogram' do
+        expect { weight.to(:kilogram) }.to raise_error(NoConversionError)
+      end
+
+      it 'converts to each' do
+        each = BigDecimal.new('1')
+        expect(weight.to(:each)).to eq(Weight.new(each, :each))
+        expect(weight.to_each).to eq(Weight.new(each, :each))
+        expect(weight.to(:each).value.round(9)).to eq(BigDecimal.new('1'))
       end
     end
   end
