@@ -10,7 +10,16 @@ module Weighable
       pound:     2,
       milligram: 3,
       kilogram:  4,
-      each:      5
+      unit:      5
+    }.freeze
+
+    UNIT_ABBREVIATION = {
+      gram:      'g',
+      ounce:     'oz',
+      pound:     'lb',
+      milligram: 'mg',
+      kilogram:  'kg',
+      unit:      nil
     }.freeze
 
     GRAMS_PER_OUNCE     = BigDecimal.new('28.34952')
@@ -27,8 +36,8 @@ module Weighable
     KILOGRAMS_PER_MILLIGRAM = MILLIGRAMS_PER_GRAM**2
 
     CONVERSIONS = {
-      UNIT[:each] => {
-        UNIT[:each] => [:*, IDENTITY]
+      UNIT[:unit] => {
+        UNIT[:unit] => [:*, IDENTITY]
       },
       UNIT[:gram] => {
         UNIT[:gram]      => [:*, IDENTITY],
@@ -67,6 +76,11 @@ module Weighable
       }
     }.freeze
 
+    def self.parse(string)
+      value, unit = string.split(' ')
+      Weight.new(value, UNIT_ABBREVIATION.find { |_k, v| v == unit }.first)
+    end
+
     def initialize(value, unit)
       @value = value.to_d
       @unit  = unit.is_a?(Fixnum) ? unit : unit_from_symbol(unit.to_sym)
@@ -86,6 +100,15 @@ module Weighable
       end
       plural = ActiveSupport::Inflector.pluralize(unit)
       alias_method "to_#{plural}", "to_#{unit}" unless unit == plural
+    end
+
+    def to_s(only_unit: false)
+      if only_unit
+        unit_abbreviation.to_s
+      else
+        value = @value.to_f == @value.to_i ? @value.to_i : @value.to_f
+        [value, unit_abbreviation].compact.join(' ')
+      end
     end
 
     def ==(other)
@@ -121,6 +144,10 @@ module Weighable
 
     def unit_name
       unit_from_int(@unit)
+    end
+
+    def unit_abbreviation
+      UNIT_ABBREVIATION[unit_from_int(@unit)]
     end
 
     def unit_from_symbol(unit)
