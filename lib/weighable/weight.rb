@@ -111,10 +111,6 @@ module Weighable
       end
     end
 
-    def ==(other)
-      other.class == self.class && other.value == @value && other.unit == @unit
-    end
-
     def +(other)
       other = other.to(unit_name)
       Weight.new(@value + other.value, unit_name)
@@ -130,14 +126,38 @@ module Weighable
       Weight.new(@value * other.value, unit_name)
     end
 
-    def round(precision = 0)
-      @value = @value.round(precision)
-      self
-    end
-
     def /(other)
       other = other.to(unit_name)
       Weight.new(@value / other.value, unit_name)
+    end
+
+    def ==(other)
+      other.class == self.class && other.value == @value && other.unit == @unit
+    end
+
+    def <(other)
+      other = other.to(unit_name)
+      @value < other.value
+    end
+
+    def <=(other)
+      other = other.to(unit_name)
+      @value <= other.value
+    end
+
+    def >(other)
+      other = other.to(unit_name)
+      @value > other.value
+    end
+
+    def >=(other)
+      other = other.to(unit_name)
+      @value >= other.value
+    end
+
+    def round(precision = 0)
+      @value = @value.round(precision)
+      self
     end
 
     private
