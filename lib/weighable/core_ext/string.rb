@@ -1,4 +1,4 @@
-require 'weighable/inflections'
+require 'active_support/inflector/methods'
 
 class String
   Weighable::Weight::UNIT.each do |unit, _|

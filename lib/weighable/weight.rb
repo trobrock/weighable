@@ -1,4 +1,4 @@
-require 'weighable/inflections'
+require 'active_support/inflector/methods'
 
 module Weighable
   class Weight
