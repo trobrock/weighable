@@ -3,7 +3,8 @@ require 'weighable/core_ext/string'
 
 describe String do
   it 'creates helper methods for all units' do
-    expect('2.33'.each).to eq(Weighable::Weight.new(BigDecimal.new('2.33'), :each))
+    expect('2.33'.units).to eq(Weighable::Weight.new(BigDecimal.new('2.33'), :unit))
+    expect('2.33'.unit).to eq(Weighable::Weight.new(BigDecimal.new('2.33'), :unit))
     expect('2.33'.grams).to eq(Weighable::Weight.new(BigDecimal.new('2.33'), :gram))
     expect('2.33'.gram).to eq(Weighable::Weight.new(BigDecimal.new('2.33'), :gram))
     expect('2.33'.ounces).to eq(Weighable::Weight.new(BigDecimal.new('2.33'), :ounce))

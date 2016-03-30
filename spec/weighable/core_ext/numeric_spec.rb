@@ -3,7 +3,8 @@ require 'weighable/core_ext/numeric'
 
 describe Numeric do
   it 'creates helper methods for all units' do
-    expect(2.each).to eq(Weighable::Weight.new(2, :each))
+    expect(2.units).to eq(Weighable::Weight.new(2, :unit))
+    expect(2.unit).to eq(Weighable::Weight.new(2, :unit))
     expect(2.grams).to eq(Weighable::Weight.new(2, :gram))
     expect(2.gram).to eq(Weighable::Weight.new(2, :gram))
     expect(2.ounces).to eq(Weighable::Weight.new(2, :ounce))

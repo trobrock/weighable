@@ -9,7 +9,7 @@ module Weighable
         define_method "#{column}=" do |weight|
           weight = Weight.new(weight['value'], weight['unit']) if weight.is_a?(Hash)
           original_unit = weight.try(:unit)
-          weight = weight.try(:to, store_as) if original_unit && original_unit != :each
+          weight = weight.try(:to, store_as) if original_unit && original_unit != :unit
 
           public_send("#{column}_value=", weight.try(:value))
           public_send("#{column}_unit=", weight.try(:unit))
