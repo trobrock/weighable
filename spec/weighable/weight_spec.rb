@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'weighable/core_ext'
 
 module Weighable
   describe Weight do
@@ -164,6 +165,72 @@ module Weighable
 
       it 'rounds the value to default precision' do
         expect(weight.round).to eq(Weight.new(BigDecimal.new('2'), :gram))
+      end
+    end
+
+    context 'comparisons' do
+      context '<' do
+        it 'compares two comparable weights' do
+          expect(1.unit < 2.units).to eq(true)
+          expect(1.unit < 1.unit).to eq(false)
+          expect(2.units < 1.unit).to eq(false)
+          expect(1.gram < 1.ounce).to eq(true)
+          expect(1.gram < 1.gram).to eq(false)
+          expect(1.ounce < 1.gram).to eq(false)
+        end
+
+        it 'cannot compare two unlike weights' do
+          expect { 1.unit < 1.gram }.to raise_error(Weighable::NoConversionError)
+          expect { 1.gram < 1.unit }.to raise_error(Weighable::NoConversionError)
+        end
+      end
+
+      context '<=' do
+        it 'compares two comparable weights' do
+          expect(1.unit <= 2.units).to eq(true)
+          expect(1.unit <= 1.unit).to eq(true)
+          expect(2.units <= 1.unit).to eq(false)
+          expect(1.gram <= 1.ounce).to eq(true)
+          expect(1.gram <= 1.gram).to eq(true)
+          expect(1.ounce <= 1.gram).to eq(false)
+        end
+
+        it 'cannot compare two unlike weights' do
+          expect { 1.unit <= 1.gram }.to raise_error(Weighable::NoConversionError)
+          expect { 1.gram <= 1.unit }.to raise_error(Weighable::NoConversionError)
+        end
+      end
+
+      context '>' do
+        it 'compares two comparable weights' do
+          expect(2.units > 1.unit).to eq(true)
+          expect(1.unit > 1.unit).to eq(false)
+          expect(1.unit > 2.units).to eq(false)
+          expect(1.gram > 1.ounce).to eq(false)
+          expect(1.gram > 1.gram).to eq(false)
+          expect(1.ounce > 1.gram).to eq(true)
+        end
+
+        it 'cannot compare two unlike weights' do
+          expect { 1.unit > 1.gram }.to raise_error(Weighable::NoConversionError)
+          expect { 1.gram > 1.unit }.to raise_error(Weighable::NoConversionError)
+        end
+      end
+
+      context '>=' do
+        it 'compares two comparable weights' do
+          expect(1.unit >= 2.units).to eq(false)
+          expect(1.unit >= 1.unit).to eq(true)
+          expect(2.units >= 1.unit).to eq(true)
+          expect(1.gram >= 1.ounce).to eq(false)
+          expect(1.gram >= 1.gram).to eq(true)
+          expect(1.ounce >= 1.gram).to eq(true)
+        end
+
+        it 'cannot compare two unlike weights' do
+          expect { 1.unit >= 1.gram }.to raise_error(Weighable::NoConversionError)
+          expect { 1.gram >= 1.unit }.to raise_error(Weighable::NoConversionError)
+        end
       end
     end
 
