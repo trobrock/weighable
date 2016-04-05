@@ -137,21 +137,28 @@ module Weighable
           expect { weight_unit * weight_gram }.to raise_error(NoConversionError)
           expect { weight_gram * weight_unit }.to raise_error(NoConversionError)
         end
+
+        it 'non-weight' do
+          expect(weight_gram * 5).to eq(Weight.new(6, :gram))
+        end
       end
 
       context 'dividing' do
         it 'two like weights' do
-          expect(weight_gram / weight_gram).to eq(Weight.new(1, :gram))
+          expect(weight_gram / weight_gram).to eq(1)
         end
 
         it 'two unlike weights' do
-          expect((weight_gram / weight_ounce).round(9))
-            .to eq(Weight.new(BigDecimal.new('0.042328759'), :gram))
+          expect((weight_gram / weight_ounce).round(9)).to eq(BigDecimal.new('0.042328759'))
         end
 
         it 'two unlike unit types' do
           expect { weight_unit / weight_gram }.to raise_error(NoConversionError)
           expect { weight_gram / weight_unit }.to raise_error(NoConversionError)
+        end
+
+        it 'non-weight' do
+          expect(weight_gram / 0.2).to eq(Weight.new(6, :gram))
         end
       end
     end
