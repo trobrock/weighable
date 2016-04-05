@@ -122,12 +122,12 @@ module Weighable
     end
 
     def *(other)
-      other = if other.is_a? Weight
-                other.to(unit_name)
-              else
-                Weight.new(other, unit_name)
-              end
-      Weight.new(@value * other.value, unit_name)
+      if other.is_a? Weight
+        other = other.to(unit_name)
+        Weight.new(@value * other.value, unit_name)
+      else
+        Weight.new(@value * other, unit_name)
+      end
     end
 
     def /(other)
