@@ -8,9 +8,21 @@ module Weighable
     end
 
     context 'parse' do
+      context 'for invalid argument' do
+        it 'raises an error' do
+          expect do
+            Weight.parse('1 bob')
+          end.to raise_error(ArgumentError, 'invalid weight')
+        end
+      end
+
       context 'for unit' do
-        it 'returns the correct weight' do
+        it 'returns the correct weight with no abbreviation' do
           expect(Weight.parse('1')).to eq(Weight.new(1, :unit))
+        end
+
+        it 'returns the correct weight with ea' do
+          expect(Weight.parse('1 ea')).to eq(Weight.new(1, :unit))
         end
       end
 
