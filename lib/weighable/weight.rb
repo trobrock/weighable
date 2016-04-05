@@ -22,6 +22,16 @@ module Weighable
       unit:      nil
     }.freeze
 
+    ABBREVATION_ALIASES = {
+      'g'  => :gram,
+      'oz' => :ounce,
+      'lb' => :pound,
+      'mg' => :milligram,
+      'kg' => :kilogram,
+      'ea' => :unit,
+      nil  => :unit
+    }.freeze
+
     GRAMS_PER_OUNCE     = BigDecimal.new('28.34952')
     GRAMS_PER_POUND     = BigDecimal.new('453.59237')
     OUNCES_PER_POUND    = BigDecimal.new('16')
@@ -78,7 +88,9 @@ module Weighable
 
     def self.parse(string)
       value, unit = string.split(' ')
-      Weight.new(value, UNIT_ABBREVIATION.find { |_k, v| v == unit }.first)
+      unit = ABBREVATION_ALIASES[unit]
+      fail ArgumentError, 'invalid weight' if unit.nil?
+      Weight.new(value, unit)
     end
 
     def initialize(value, unit)
