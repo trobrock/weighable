@@ -234,6 +234,122 @@ module Weighable
       end
     end
 
+    context 'unit checking' do
+      context 'for units' do
+        let(:weight) { 1.unit }
+
+        it 'should know what unit it is' do
+          expect(weight.is_unit?).to eq(true)
+          expect(weight.is_units?).to eq(true)
+          expect(weight.is_gram?).to eq(false)
+          expect(weight.is_grams?).to eq(false)
+          expect(weight.is_ounce?).to eq(false)
+          expect(weight.is_ounces?).to eq(false)
+          expect(weight.is_pound?).to eq(false)
+          expect(weight.is_pounds?).to eq(false)
+          expect(weight.is_milligram?).to eq(false)
+          expect(weight.is_milligrams?).to eq(false)
+          expect(weight.is_kilogram?).to eq(false)
+          expect(weight.is_kilograms?).to eq(false)
+        end
+      end
+
+      context 'for grams' do
+        let(:weight) { 1.gram }
+
+        it 'should know what unit it is' do
+          expect(weight.is_unit?).to eq(false)
+          expect(weight.is_units?).to eq(false)
+          expect(weight.is_gram?).to eq(true)
+          expect(weight.is_grams?).to eq(true)
+          expect(weight.is_ounce?).to eq(false)
+          expect(weight.is_ounces?).to eq(false)
+          expect(weight.is_pound?).to eq(false)
+          expect(weight.is_pounds?).to eq(false)
+          expect(weight.is_milligram?).to eq(false)
+          expect(weight.is_milligrams?).to eq(false)
+          expect(weight.is_kilogram?).to eq(false)
+          expect(weight.is_kilograms?).to eq(false)
+        end
+      end
+
+      context 'for ounces' do
+        let(:weight) { 1.ounce }
+
+        it 'should know what unit it is' do
+          expect(weight.is_unit?).to eq(false)
+          expect(weight.is_units?).to eq(false)
+          expect(weight.is_gram?).to eq(false)
+          expect(weight.is_grams?).to eq(false)
+          expect(weight.is_ounce?).to eq(true)
+          expect(weight.is_ounces?).to eq(true)
+          expect(weight.is_pound?).to eq(false)
+          expect(weight.is_pounds?).to eq(false)
+          expect(weight.is_milligram?).to eq(false)
+          expect(weight.is_milligrams?).to eq(false)
+          expect(weight.is_kilogram?).to eq(false)
+          expect(weight.is_kilograms?).to eq(false)
+        end
+      end
+
+      context 'for pounds' do
+        let(:weight) { 1.pound }
+
+        it 'should know what unit it is' do
+          expect(weight.is_unit?).to eq(false)
+          expect(weight.is_units?).to eq(false)
+          expect(weight.is_gram?).to eq(false)
+          expect(weight.is_grams?).to eq(false)
+          expect(weight.is_ounce?).to eq(false)
+          expect(weight.is_ounces?).to eq(false)
+          expect(weight.is_pound?).to eq(true)
+          expect(weight.is_pounds?).to eq(true)
+          expect(weight.is_milligram?).to eq(false)
+          expect(weight.is_milligrams?).to eq(false)
+          expect(weight.is_kilogram?).to eq(false)
+          expect(weight.is_kilograms?).to eq(false)
+        end
+      end
+
+      context 'for milligrams' do
+        let(:weight) { 1.milligram }
+
+        it 'should know what unit it is' do
+          expect(weight.is_unit?).to eq(false)
+          expect(weight.is_units?).to eq(false)
+          expect(weight.is_gram?).to eq(false)
+          expect(weight.is_grams?).to eq(false)
+          expect(weight.is_ounce?).to eq(false)
+          expect(weight.is_ounces?).to eq(false)
+          expect(weight.is_pound?).to eq(false)
+          expect(weight.is_pounds?).to eq(false)
+          expect(weight.is_milligram?).to eq(true)
+          expect(weight.is_milligrams?).to eq(true)
+          expect(weight.is_kilogram?).to eq(false)
+          expect(weight.is_kilograms?).to eq(false)
+        end
+      end
+
+      context 'for kilograms' do
+        let(:weight) { 1.kilogram }
+
+        it 'should know what unit it is' do
+          expect(weight.is_unit?).to eq(false)
+          expect(weight.is_units?).to eq(false)
+          expect(weight.is_gram?).to eq(false)
+          expect(weight.is_grams?).to eq(false)
+          expect(weight.is_ounce?).to eq(false)
+          expect(weight.is_ounces?).to eq(false)
+          expect(weight.is_pound?).to eq(false)
+          expect(weight.is_pounds?).to eq(false)
+          expect(weight.is_milligram?).to eq(false)
+          expect(weight.is_milligrams?).to eq(false)
+          expect(weight.is_kilogram?).to eq(true)
+          expect(weight.is_kilograms?).to eq(true)
+        end
+      end
+    end
+
     context 'from gram' do
       let(:weight) { Weight.new(1, :gram) }
 

@@ -95,11 +95,16 @@ module Weighable
 
     UNIT.keys.each do |unit|
       unit = unit.to_s
+      plural = ActiveSupport::Inflector.pluralize(unit)
       define_method "to_#{unit}" do
         to(unit)
       end
-      plural = ActiveSupport::Inflector.pluralize(unit)
       alias_method "to_#{plural}", "to_#{unit}" unless unit == plural
+
+      define_method "is_#{unit}?" do
+        @unit == unit_from_symbol(unit.to_sym)
+      end
+      alias_method "is_#{plural}?", "is_#{unit}?" unless unit == plural
     end
 
     def to_s(only_unit: false)
