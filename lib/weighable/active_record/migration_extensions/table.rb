@@ -9,9 +9,9 @@ module Weighable
         end
 
         def remove_weighable(column)
-          remove_column "#{column}_value"
-          remove_column "#{column}_unit"
-          remove_column "#{column}_display_unit"
+          remove "#{column}_value"
+          remove "#{column}_unit"
+          remove "#{column}_display_unit"
         end
       end
     end
