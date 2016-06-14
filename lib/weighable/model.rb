@@ -5,7 +5,13 @@ module Weighable
     class_methods do
       def weighable(column, presence: false, store_as: :gram, precision: nil)
         apply_validations(column, presence: presence)
+        define_setter(column, store_as: store_as, precision: precision)
+        define_getter(column)
+      end
 
+      private
+
+      def define_setter(column, store_as: :gram, precision: nil)
         define_method "#{column}=" do |weight|
           weight = Weight.new(weight['value'], weight['unit']) if weight.is_a?(Hash)
           original_unit = weight.try(:unit)
@@ -23,7 +29,9 @@ module Weighable
           public_send("#{column}_unit=", weight.try(:unit))
           public_send("#{column}_display_unit=", original_unit)
         end
+      end
 
+      def define_getter(column)
         define_method column do
           value        = public_send("#{column}_value")
           unit         = public_send("#{column}_unit")
@@ -33,8 +41,6 @@ module Weighable
           Weight.new(value, unit).to(display_unit)
         end
       end
-
-      private
 
       def apply_validations(column, presence: false)
         if presence
