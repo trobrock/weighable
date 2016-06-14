@@ -3,9 +3,15 @@ module Weighable
     extend ActiveSupport::Concern
 
     class_methods do
-      def weighable(column, presence: false, store_as: :gram)
+      def weighable(column, presence: false, store_as: :gram, precision: nil)
         apply_validations(column, presence: presence)
+        define_setter(column, store_as: store_as, precision: precision)
+        define_getter(column)
+      end
 
+      private
+
+      def define_setter(column, store_as: :gram, precision: nil)
         define_method "#{column}=" do |weight|
           weight = Weight.new(weight['value'], weight['unit']) if weight.is_a?(Hash)
           original_unit = weight.try(:unit)
@@ -14,11 +20,18 @@ module Weighable
             weight = weight.try(:to, store_as)
           end
 
+          if precision.present?
+            local_precision = precision.is_a?(Proc) ? instance_exec(&precision) : precision
+            weight = weight.round(local_precision)
+          end
+
           public_send("#{column}_value=", weight.try(:value))
           public_send("#{column}_unit=", weight.try(:unit))
           public_send("#{column}_display_unit=", original_unit)
         end
+      end
 
+      def define_getter(column)
         define_method column do
           value        = public_send("#{column}_value")
           unit         = public_send("#{column}_unit")
@@ -28,8 +41,6 @@ module Weighable
           Weight.new(value, unit).to(display_unit)
         end
       end
-
-      private
 
       def apply_validations(column, presence: false)
         if presence
