@@ -3,7 +3,7 @@ module Weighable
     extend ActiveSupport::Concern
 
     class_methods do
-      def weighable(column, presence: false, store_as: :gram)
+      def weighable(column, presence: false, store_as: :gram, precision: nil)
         apply_validations(column, presence: presence)
 
         define_method "#{column}=" do |weight|
@@ -12,6 +12,11 @@ module Weighable
 
           if original_unit && original_unit != Weight::UNIT[:unit]
             weight = weight.try(:to, store_as)
+          end
+
+          if precision.present?
+            local_precision = precision.is_a?(Proc) ? instance_exec(&precision) : precision
+            weight = weight.round(local_precision)
           end
 
           public_send("#{column}_value=", weight.try(:value))
