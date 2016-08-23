@@ -22,7 +22,7 @@ module Weighable
       unit:      nil
     }.freeze
 
-    ABBREVATION_ALIASES = {
+    ABBREVIATION_ALIASES = {
       'g'  => :gram,
       'oz' => :ounce,
       'lb' => :pound,
@@ -88,7 +88,7 @@ module Weighable
 
     def self.parse(string)
       value, unit = string.split(' ')
-      unit = ABBREVATION_ALIASES[unit]
+      unit = ABBREVIATION_ALIASES[unit]
       fail ArgumentError, 'invalid weight' if unit.nil?
       Weight.new(value, unit)
     end
