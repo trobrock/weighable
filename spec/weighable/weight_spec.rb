@@ -7,6 +7,20 @@ module Weighable
       expect(Weight::UNIT).to eq(gram: 0, ounce: 1, pound: 2, milligram: 3, kilogram: 4, unit: 5)
     end
 
+    context 'zero?' do
+      it 'is if the value is zero' do
+        expect(0.units.zero?).to be true
+      end
+
+      it 'is not if the value is greater than zero' do
+        expect(0.1.grams.zero?).to be false
+      end
+
+      it 'is not if the value is less than zero' do
+        expect(-0.1.grams.zero?).to be false
+      end
+    end
+
     context 'parse' do
       context 'for invalid argument' do
         it 'raises an error' do
