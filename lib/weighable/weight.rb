@@ -185,6 +185,10 @@ module Weighable
       self
     end
 
+    def zero?
+      @value == 0
+    end
+
     private
 
     def unit_name
