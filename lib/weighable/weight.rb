@@ -186,7 +186,7 @@ module Weighable
     end
 
     def zero?
-      @value == 0
+      @value.zero?
     end
 
     private
