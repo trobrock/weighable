@@ -88,9 +88,19 @@ module Weighable
 
     def self.parse(string)
       value, unit = string.split(' ')
-      unit = ABBREVIATION_ALIASES[unit]
+      from_value_and_unit(value, unit)
+    end
+
+    def self.from_value_and_unit(value, unit)
+      unit = parse_unit(unit)
       fail ArgumentError, 'invalid weight' if unit.nil? || value.nil?
       Weight.new(value, unit)
+    end
+
+    def self.parse_unit(unit)
+      unit = ActiveSupport::Inflector.singularize(unit.downcase) unless unit.nil?
+      unit_symbol = unit ? unit.to_sym : unit
+      UNIT[unit_symbol] || ABBREVIATION_ALIASES[unit]
     end
 
     def initialize(value, unit)
