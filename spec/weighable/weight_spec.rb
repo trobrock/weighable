@@ -23,10 +23,20 @@ module Weighable
 
     context 'parse' do
       context 'for invalid argument' do
-        it 'raises an error' do
-          expect do
-            Weight.parse('1 bob')
-          end.to raise_error(ArgumentError, 'invalid weight')
+        context 'for an invalid unit' do
+          it 'raises an error' do
+            expect do
+              Weight.parse('1 bob')
+            end.to raise_error(ArgumentError, 'invalid weight')
+          end
+        end
+
+        context 'for a blank string' do
+          it 'raises an error' do
+            expect do
+              Weight.parse(' ')
+            end.to raise_error(ArgumentError, 'invalid weight')
+          end
         end
       end
 

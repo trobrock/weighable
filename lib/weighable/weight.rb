@@ -89,7 +89,7 @@ module Weighable
     def self.parse(string)
       value, unit = string.split(' ')
       unit = ABBREVIATION_ALIASES[unit]
-      fail ArgumentError, 'invalid weight' if unit.nil?
+      fail ArgumentError, 'invalid weight' if unit.nil? || value.nil?
       Weight.new(value, unit)
     end
 
