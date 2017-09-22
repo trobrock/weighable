@@ -21,6 +21,15 @@ module Weighable
       end
     end
 
+    context 'from_value_and_unit' do
+      it 'returns the correct weight' do
+        expect(Weight.from_value_and_unit(1, 'gram')).to eq(Weight.new(1, :gram))
+        expect(Weight.from_value_and_unit(1, 'unit')).to eq(Weight.new(1, :unit))
+        expect(Weight.from_value_and_unit(1, 'ea')).to eq(Weight.new(1, :unit))
+        expect(Weight.from_value_and_unit(1, 'Ounces')).to eq(Weight.new(1, :ounce))
+      end
+    end
+
     context 'parse' do
       context 'for invalid argument' do
         context 'for an invalid unit' do
@@ -48,11 +57,23 @@ module Weighable
         it 'returns the correct weight with ea' do
           expect(Weight.parse('1 ea')).to eq(Weight.new(1, :unit))
         end
+
+        it 'returns the correct weight with unit' do
+          expect(Weight.parse('1 unit')).to eq(Weight.new(1, :unit))
+        end
       end
 
       context 'for gram' do
         it 'returns the correct weight' do
           expect(Weight.parse('1.2 g')).to eq(Weight.new(1.2, :gram))
+        end
+
+        it 'returns the correct weight with gram' do
+          expect(Weight.parse('1.2 Gram')).to eq(Weight.new(1.2, :gram))
+        end
+
+        it 'returns the correct weight with grams' do
+          expect(Weight.parse('1.2 Grams')).to eq(Weight.new(1.2, :gram))
         end
       end
 
@@ -60,11 +81,27 @@ module Weighable
         it 'returns the correct weight' do
           expect(Weight.parse('1 oz')).to eq(Weight.new(1, :ounce))
         end
+
+        it 'returns the correct weight with ounce' do
+          expect(Weight.parse('1 ounce')).to eq(Weight.new(1, :ounce))
+        end
+
+        it 'returns the correct weight with ounces' do
+          expect(Weight.parse('2 ounces')).to eq(Weight.new(2, :ounce))
+        end
       end
 
       context 'for pound' do
         it 'returns the correct weight' do
           expect(Weight.parse('1 lb')).to eq(Weight.new(1, :pound))
+        end
+
+        it 'returns the correct weight with pound' do
+          expect(Weight.parse('1 pound')).to eq(Weight.new(1, :pound))
+        end
+
+        it 'returns the correct weight with pounds' do
+          expect(Weight.parse('1 pounds')).to eq(Weight.new(1, :pound))
         end
       end
 
@@ -72,11 +109,27 @@ module Weighable
         it 'returns the correct weight' do
           expect(Weight.parse('10.1 mg')).to eq(Weight.new(10.1, :milligram))
         end
+
+        it 'returns the correct weight with milligram' do
+          expect(Weight.parse('10.1 milligram')).to eq(Weight.new(10.1, :milligram))
+        end
+
+        it 'returns the correct weight with milligrams' do
+          expect(Weight.parse('10.1 milligrams')).to eq(Weight.new(10.1, :milligram))
+        end
       end
 
       context 'for kilogram' do
         it 'returns the correct weight' do
           expect(Weight.parse('0.01 kg')).to eq(Weight.new(0.01, :kilogram))
+        end
+
+        it 'returns the correct weight for kilogram' do
+          expect(Weight.parse('0.01 kilogram')).to eq(Weight.new(0.01, :kilogram))
+        end
+
+        it 'returns the correct weight for kilograms' do
+          expect(Weight.parse('0.01 kilograms')).to eq(Weight.new(0.01, :kilogram))
         end
       end
     end
