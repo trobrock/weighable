@@ -61,6 +61,10 @@ module Weighable
         it 'returns the correct weight with unit' do
           expect(Weight.parse('1 unit')).to eq(Weight.new(1, :unit))
         end
+
+        it 'returns the correct weight with each' do
+          expect(Weight.parse('1 each')).to eq(Weight.new(1, :unit))
+        end
       end
 
       context 'for gram' do

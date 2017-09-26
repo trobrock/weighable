@@ -23,13 +23,14 @@ module Weighable
     }.freeze
 
     ABBREVIATION_ALIASES = {
-      'g'  => :gram,
-      'oz' => :ounce,
-      'lb' => :pound,
-      'mg' => :milligram,
-      'kg' => :kilogram,
-      'ea' => :unit,
-      nil  => :unit
+      'g'    => :gram,
+      'oz'   => :ounce,
+      'lb'   => :pound,
+      'mg'   => :milligram,
+      'kg'   => :kilogram,
+      'ea'   => :unit,
+      'each' => :unit,
+      nil    => :unit
     }.freeze
 
     GRAMS_PER_OUNCE     = BigDecimal.new('28.34952')
