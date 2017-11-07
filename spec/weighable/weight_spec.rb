@@ -301,6 +301,34 @@ module Weighable
         end
       end
 
+      context '<=>' do
+        it 'compares two comparable weights' do
+          expect(1.unit <=> 2.units).to eq(-1)
+          expect(1.unit <=> 1.unit).to eq(0)
+          expect(2.units <=> 1.unit).to eq(1)
+          expect(1.gram <=> 1.ounce).to eq(-1)
+          expect(1.gram <=> 1.gram).to eq(0)
+          expect(1.ounce <=> 1.gram).to eq(1)
+        end
+
+        it 'cannot compare two unlike weights' do
+          expect { 1.unit <=> 1.gram }.to raise_error(Weighable::NoConversionError)
+          expect { 1.gram <=> 1.unit }.to raise_error(Weighable::NoConversionError)
+        end
+      end
+
+      context 'comparable' do
+        it 'compares two comparable weights' do
+          expect(1.unit.between?(0.units, 2.units)).to eq(true)
+          expect([1.unit, 2.units, 0.units].sort).to eq([0.units, 1.unit, 2.units])
+        end
+
+        it 'cannot compare two unlike weights' do
+          expect { 1.unit.between?(1.gram, 2.grams) }.to raise_error(Weighable::NoConversionError)
+          expect { 1.gram.between?(1.unit, 2.units) }.to raise_error(Weighable::NoConversionError)
+        end
+      end
+
       context '>' do
         it 'compares two comparable weights' do
           expect(2.units > 1.unit).to eq(true)

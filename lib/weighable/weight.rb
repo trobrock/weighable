@@ -2,6 +2,8 @@ require 'active_support/inflector/methods'
 
 module Weighable
   class Weight
+    include Comparable
+
     attr_reader :value, :unit
 
     UNIT = {
@@ -189,6 +191,11 @@ module Weighable
     def >=(other)
       other = other.to(unit_name)
       @value >= other.value
+    end
+
+    def <=>(other)
+      other = other.to(unit_name)
+      @value <=> other.value
     end
 
     def round(precision = 0)
