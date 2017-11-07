@@ -3,6 +3,7 @@ require 'active_support/inflector/methods'
 module Weighable
   class Weight
     include Comparable
+
     attr_reader :value, :unit
 
     UNIT = {
