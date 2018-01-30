@@ -12,5 +12,7 @@ dependencies:
 test:
   pre:
     - ./cc-test-reporter before-build
+  override:
+    - bundle exec rspec --format documentation --format RspecJunitFormatter -o $CIRCLE_TEST_REPORTS/rspec.xml
   post:
     - ./cc-test-reporter after-build --exit-code $EXIT_CODE
