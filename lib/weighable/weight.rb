@@ -152,20 +152,15 @@ module Weighable
     end
 
     def *(other)
-      if other.is_a? Weight
-        other = other.to(unit_name)
-        Weight.new(@value * other.value, unit_name)
-      else
-        Weight.new(@value * other, unit_name)
-      end
+      Weight.new(@value * to_math_value(other), unit_name)
     end
 
     def /(other)
-      if other.is_a? Weight
+      if other.is_a?(Weight) && !other.is_unit?
         other = other.to(unit_name)
         BigDecimal.new(@value / other.value)
       else
-        Weight.new(@value / other, unit_name)
+        Weight.new(@value / to_math_value(other), unit_name)
       end
     end
 
@@ -208,6 +203,16 @@ module Weighable
     end
 
     private
+
+    def to_math_value(other)
+      if other.is_a?(Weight) && other.is_unit?
+        other.value
+      elsif other.is_a? Weight
+        other.to(unit_name).value
+      else
+        other
+      end
+    end
 
     def unit_name
       unit_from_int(@unit)
