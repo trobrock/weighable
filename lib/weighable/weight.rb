@@ -207,7 +207,7 @@ module Weighable
     def to_math_value(other)
       if other.is_a?(Weight) && other.is_unit?
         other.value
-      elsif other.is_a? Weight
+      elsif other.is_a?(Weight)
         other.to(unit_name).value
       else
         other
