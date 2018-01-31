@@ -228,7 +228,10 @@ module Weighable
 
         it 'two unlike unit types' do
           expect { weight_unit * weight_gram }.to raise_error(NoConversionError)
-          expect { weight_gram * weight_unit }.to raise_error(NoConversionError)
+        end
+
+        it 'weight-type and unit-type' do
+          expect(weight_gram * weight_unit).to eq(Weight.new('1.2', :gram))
         end
 
         it 'non-weight' do
@@ -247,7 +250,10 @@ module Weighable
 
         it 'two unlike unit types' do
           expect { weight_unit / weight_gram }.to raise_error(NoConversionError)
-          expect { weight_gram / weight_unit }.to raise_error(NoConversionError)
+        end
+
+        it 'weight-type and unit-type' do
+          expect(weight_gram / weight_unit).to eq(Weight.new('1.2', :gram))
         end
 
         it 'non-weight' do
