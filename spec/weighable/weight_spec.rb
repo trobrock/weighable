@@ -220,6 +220,7 @@ module Weighable
       context 'multiplying' do
         it 'two like weights' do
           expect(weight_gram * weight_gram).to eq(Weight.new(1.44, :gram))
+          expect(weight_unit * weight_unit).to eq(Weight.new(1, :unit))
         end
 
         it 'two unlike weights' do
@@ -242,6 +243,7 @@ module Weighable
       context 'dividing' do
         it 'two like weights' do
           expect(weight_gram / weight_gram).to eq(1)
+          expect(weight_unit / weight_unit).to eq(1)
         end
 
         it 'two unlike weights' do

@@ -156,7 +156,7 @@ module Weighable
     end
 
     def /(other)
-      if other.is_a?(Weight) && !other.is_unit?
+      if (other.is_a?(Weight) && !other.is_unit?) || (other.is_a?(Weight) && other.unit == @unit)
         other = other.to(unit_name)
         BigDecimal.new(@value / other.value)
       else
