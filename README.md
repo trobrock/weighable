@@ -1,4 +1,8 @@
-<h1 align=center>Weighable</h1>
+<p align=center>
+  <img src="https://cdn.rawgit.com/greenbits/weighable/rubygem-version-badge/logo.svg"
+       height="130"
+  >
+</p>
 
 <p align=center>
   <a href="https://rubygems.org/gems/weighable">
