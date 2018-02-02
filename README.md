@@ -1,6 +1,23 @@
-# Weighable! [weighable rubygems badge](https://img.shields.io/gem/v/weighable.svg) 
+<h1 align=center>Weighable</h1>
 
-A gem for dealing with weights in ruby and rails.
+<p align=center>
+  <a href="https://rubygems.org/gems/weighable">
+    <img src="https://img.shields.io/gem/v/weighable.svg?style=flat-square"
+         alt="Rubygems homepage"></a>
+  <a href="http://www.rubydoc.info/gems/weighable">
+     <img src="https://img.shields.io/badge/rdoc-yes-brightgreen.svg?style=flat-square"
+          alt="RDoc documentation"></a>
+  <a href="https://circleci.com/gh/greenbits/weighable/tree/master">
+     <img src="https://img.shields.io/circleci/project/github/greenbits/weighable.svg?style=flat-square"
+          alt="CircleCI build status"></a>
+  <a href="https://github.com/greenbits/weighable/issues">
+     <img src="https://img.shields.io/github/issues/greenbits/weighable.svg?style=flat-square"
+          alt="GitHub issues"></a>
+</p>
+
+<p align=center>
+  A gem for dealing with weights in ruby and rails.
+</p>
 
 ## Installation
 
