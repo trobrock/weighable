@@ -1,4 +1,4 @@
-# Weighable
+# Weighable! [weighable rubygems badge](https://img.shields.io/gem/v/weighable.svg) 
 
 A gem for dealing with weights in ruby and rails.
 
