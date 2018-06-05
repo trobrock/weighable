@@ -271,8 +271,47 @@ module Weighable
         expect(weight.round(8)).to eq(Weight.new(BigDecimal.new('1.76470588'), :gram))
       end
 
+      it 'should return a copy' do
+        weight.round
+        expect(weight.value.round(8)).to eq(BigDecimal.new('1.76470588'))
+      end
+
       it 'rounds the value to default precision' do
         expect(weight.round).to eq(Weight.new(BigDecimal.new('2'), :gram))
+      end
+    end
+
+    context 'floor' do
+      let(:weight) { Weight.new(BigDecimal.new('60') / BigDecimal.new('34'), :gram) }
+
+      it 'floors the value to specified precision' do
+        expect(weight.floor(8)).to eq(Weight.new(BigDecimal.new('1.76470588'), :gram))
+      end
+
+      it 'should return a copy' do
+        weight.floor
+        expect(weight.value.floor(8)).to eq(BigDecimal.new('1.76470588'))
+      end
+
+      it 'floors the value to default precision' do
+        expect(weight.floor).to eq(Weight.new(BigDecimal.new('1'), :gram))
+      end
+    end
+
+    context 'ceil' do
+      let(:weight) { Weight.new(BigDecimal.new('60') / BigDecimal.new('34'), :gram) }
+
+      it 'ceils the value to specified precision' do
+        expect(weight.ceil(8)).to eq(Weight.new(BigDecimal.new('1.76470589'), :gram))
+      end
+
+      it 'should return a copy' do
+        weight.ceil
+        expect(weight.value.ceil(8)).to eq(BigDecimal.new('1.76470589'))
+      end
+
+      it 'ceils the value to default precision' do
+        expect(weight.ceil).to eq(Weight.new(BigDecimal.new('2'), :gram))
       end
     end
 

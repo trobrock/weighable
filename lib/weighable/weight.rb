@@ -194,8 +194,15 @@ module Weighable
     end
 
     def round(precision = 0)
-      @value = @value.round(precision)
-      self
+      Weight.new(@value.round(precision), @unit)
+    end
+
+    def ceil(precision = 0)
+      Weight.new(@value.ceil(precision), @unit)
+    end
+
+    def floor(precision = 0)
+      Weight.new(@value.floor(precision), @unit)
     end
 
     def zero?
