@@ -205,6 +205,10 @@ module Weighable
       Weight.new(@value.floor(precision), @unit)
     end
 
+    def abs
+      Weight.new(@value.abs, @unit)
+    end
+
     def zero?
       @value.zero?
     end
