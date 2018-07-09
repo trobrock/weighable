@@ -315,6 +315,20 @@ module Weighable
       end
     end
 
+    context 'abs' do
+      let(:weight) { Weight.new(BigDecimal.new('-20'), :gram) }
+
+      it 'returns absolute value' do
+        expect(weight.abs).to eq(Weight.new(BigDecimal.new('20.0'), :gram))
+      end
+
+      it 'should return a copy' do
+        weight.abs
+        expect(weight.value).to eq(BigDecimal.new('-20'))
+      end
+
+    end
+
     context 'comparisons' do
       context '<' do
         it 'compares two comparable weights' do
