@@ -23,7 +23,7 @@ module Weighable
       milligram:   'mg',
       kilogram:    'kg',
       fluid_ounce: 'fl oz',
-      unit:        nil,
+      unit:        nil
     }.freeze
 
     ABBREVIATION_ALIASES = {
@@ -97,12 +97,12 @@ module Weighable
 
     def self.parse(string)
       unit_start = string.index(' ')
-      unless unit_start
-        from_value_and_unit(string, nil)
-      else
+      if unit_start
         unit = string.slice!(unit_start + 1..-1)
         value = string.slice!(0..unit_start - 1)
         from_value_and_unit(value, unit)
+      else
+        from_value_and_unit(string, nil)
       end
     end
 
@@ -114,7 +114,7 @@ module Weighable
 
     def self.parse_unit(unit)
       unit = ActiveSupport::Inflector.singularize(unit.downcase) unless unit.nil?
-      unit_symbol = unit ? unit.gsub(' ', '_').to_sym : unit
+      unit_symbol = unit ? unit.tr(' ', '_').to_sym : unit
       UNIT[unit_symbol] || ABBREVIATION_ALIASES[unit]
     end
 
