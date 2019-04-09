@@ -7,32 +7,35 @@ module Weighable
     attr_reader :value, :unit
 
     UNIT = {
-      gram:      0,
-      ounce:     1,
-      pound:     2,
-      milligram: 3,
-      kilogram:  4,
-      unit:      5
+      gram:        0,
+      ounce:       1,
+      pound:       2,
+      milligram:   3,
+      kilogram:    4,
+      unit:        5,
+      fluid_ounce: 6
     }.freeze
 
     UNIT_ABBREVIATION = {
-      gram:      'g',
-      ounce:     'oz',
-      pound:     'lb',
-      milligram: 'mg',
-      kilogram:  'kg',
-      unit:      nil
+      gram:        'g',
+      ounce:       'oz',
+      pound:       'lb',
+      milligram:   'mg',
+      kilogram:    'kg',
+      fluid_ounce: 'fl oz',
+      unit:        nil,
     }.freeze
 
     ABBREVIATION_ALIASES = {
-      'g'    => :gram,
-      'oz'   => :ounce,
-      'lb'   => :pound,
-      'mg'   => :milligram,
-      'kg'   => :kilogram,
-      'ea'   => :unit,
-      'each' => :unit,
-      nil    => :unit
+      'g'     => :gram,
+      'oz'    => :ounce,
+      'lb'    => :pound,
+      'mg'    => :milligram,
+      'kg'    => :kilogram,
+      'fl oz' => :fluid_ounce,
+      'ea'    => :unit,
+      'each'  => :unit,
+      nil     => :unit
     }.freeze
 
     GRAMS_PER_OUNCE     = BigDecimal.new('28.34952')
@@ -86,12 +89,21 @@ module Weighable
         UNIT[:pound]     => [:/, KILOGRAMS_PER_POUND],
         UNIT[:milligram] => [:*, KILOGRAMS_PER_MILLIGRAM],
         UNIT[:kilogram]  => [:*, IDENTITY]
+      },
+      UNIT[:fluid_ounce] => {
+        UNIT[:fluid_ounce] => [:*, IDENTITY]
       }
     }.freeze
 
     def self.parse(string)
-      value, unit = string.split(' ')
-      from_value_and_unit(value, unit)
+      unit_start = string.index(' ')
+      unless unit_start
+        from_value_and_unit(string, nil)
+      else
+        unit = string.slice!(unit_start + 1..-1)
+        value = string.slice!(0..unit_start - 1)
+        from_value_and_unit(value, unit)
+      end
     end
 
     def self.from_value_and_unit(value, unit)
@@ -102,7 +114,7 @@ module Weighable
 
     def self.parse_unit(unit)
       unit = ActiveSupport::Inflector.singularize(unit.downcase) unless unit.nil?
-      unit_symbol = unit ? unit.to_sym : unit
+      unit_symbol = unit ? unit.gsub(' ', '_').to_sym : unit
       UNIT[unit_symbol] || ABBREVIATION_ALIASES[unit]
     end
 
