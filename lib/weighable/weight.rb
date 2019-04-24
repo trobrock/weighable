@@ -49,7 +49,7 @@ module Weighable
     KILOGRAMS_PER_OUNCE     = GRAMS_PER_OUNCE * KILOGRAMS_PER_GRAM
     MILLIGRAMS_PER_POUND    = GRAMS_PER_POUND * MILLIGRAMS_PER_GRAM
     KILOGRAMS_PER_POUND     = GRAMS_PER_POUND * KILOGRAMS_PER_GRAM
-    KILOGRAMS_PER_MILLIGRAM = MILLIGRAMS_PER_GRAM**2
+    MILLIGRAMS_PER_KILOGRAM = MILLIGRAMS_PER_GRAM**2
     FLUID_OUNCE_PER_OUNCE   = IDENTITY
 
     CONVERSIONS = {
@@ -62,39 +62,47 @@ module Weighable
         UNIT[:pound]       => [:/, GRAMS_PER_POUND],
         UNIT[:milligram]   => [:*, MILLIGRAMS_PER_GRAM],
         UNIT[:kilogram]    => [:*, KILOGRAMS_PER_GRAM],
-        UNIT[:fluid_ounce] => [:*, IDENTITY]
+        UNIT[:fluid_ounce] => [:/, GRAMS_PER_OUNCE]
       },
       UNIT[:ounce] => {
         UNIT[:gram]      => [:*, GRAMS_PER_OUNCE],
         UNIT[:ounce]     => [:*, IDENTITY],
         UNIT[:pound]     => [:/, OUNCES_PER_POUND],
         UNIT[:milligram] => [:*, MILLIGRAMS_PER_OUNCE],
-        UNIT[:kilogram]  => [:*, KILOGRAMS_PER_OUNCE]
+        UNIT[:kilogram]  => [:*, KILOGRAMS_PER_OUNCE],
+        UNIT[:fluid_ounce] => [:*, IDENTITY]
       },
       UNIT[:pound] => {
         UNIT[:gram]      => [:*, GRAMS_PER_POUND],
         UNIT[:ounce]     => [:*, OUNCES_PER_POUND],
         UNIT[:pound]     => [:*, IDENTITY],
         UNIT[:milligram] => [:*, MILLIGRAMS_PER_POUND],
-        UNIT[:kilogram]  => [:*, KILOGRAMS_PER_POUND]
+        UNIT[:kilogram]  => [:*, KILOGRAMS_PER_POUND],
+        UNIT[:fluid_ounce] => [:*, OUNCES_PER_POUND]
       },
       UNIT[:milligram] => {
         UNIT[:gram]      => [:/, MILLIGRAMS_PER_GRAM],
         UNIT[:ounce]     => [:/, MILLIGRAMS_PER_OUNCE],
         UNIT[:pound]     => [:/, MILLIGRAMS_PER_POUND],
         UNIT[:milligram] => [:*, IDENTITY],
-        UNIT[:kilogram]  => [:/, KILOGRAMS_PER_MILLIGRAM]
+        UNIT[:kilogram]  => [:/, MILLIGRAMS_PER_KILOGRAM],
+        UNIT[:fluid_ounce] => [:/, MILLIGRAMS_PER_OUNCE]
       },
       UNIT[:kilogram] => {
         UNIT[:gram]      => [:/, KILOGRAMS_PER_GRAM],
         UNIT[:ounce]     => [:/, KILOGRAMS_PER_OUNCE],
         UNIT[:pound]     => [:/, KILOGRAMS_PER_POUND],
-        UNIT[:milligram] => [:*, KILOGRAMS_PER_MILLIGRAM],
-        UNIT[:kilogram]  => [:*, IDENTITY]
+        UNIT[:milligram] => [:*, MILLIGRAMS_PER_KILOGRAM],
+        UNIT[:kilogram]  => [:*, IDENTITY],
+        UNIT[:fluid_ounce] => [:/, KILOGRAMS_PER_OUNCE]
       },
       UNIT[:fluid_ounce] => {
         UNIT[:fluid_ounce] => [:*, IDENTITY],
-        UNIT[:gram]        => [:/, IDENTITY]
+        UNIT[:gram]        => [:*, GRAMS_PER_OUNCE],
+        UNIT[:ounce]       => [:*, IDENTITY],
+        UNIT[:pound]       => [:/, OUNCES_PER_POUND],
+        UNIT[:milligram]   => [:*, MILLIGRAMS_PER_OUNCE],
+        UNIT[:kilogram]    => [:*, KILOGRAMS_PER_OUNCE],
       }
     }.freeze
 
