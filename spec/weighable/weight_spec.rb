@@ -609,8 +609,11 @@ module Weighable
         expect { weight.to(:unit) }.to raise_error(NoConversionError)
       end
 
-      it 'does not convert to fluid ounce' do
-        expect { weight.to(:fluid_ounce)}.to raise_error(NoConversionError)
+      it 'converts to fluid ounce' do
+        fluid_ounce = BigDecimal.new('1')
+        expect(weight.to(:fluid_ounce)).to eq(Weight.new(fluid_ounce, :fluid_ounce))
+        expect(weight.to_fluid_ounce).to eq(Weight.new(fluid_ounce, :fluid_ounce))
+        expect(weight.to(:fluid_ounce).value.round(9)).to eq(BigDecimal.new('1'))
       end
     end
 
@@ -840,8 +843,11 @@ module Weighable
     context 'from fluid ounce' do
       let(:weight) { Weight.new(1, :fluid_ounce) }
 
-      it 'does not convert to gram' do
-        expect { weight.to(:gram) }.to raise_error(NoConversionError)
+      it 'converts to gram with identity' do
+        unit = BigDecimal.new('1')
+        expect(weight.to(:gram)).to eq(Weight.new(unit, :gram))
+        expect(weight.to_gram).to eq(Weight.new(unit, :gram))
+        expect(weight.to(:gram).value.round(9)).to eq(BigDecimal.new('1'))
       end
 
       it 'does not convert to ounce' do

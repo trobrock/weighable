@@ -50,17 +50,19 @@ module Weighable
     MILLIGRAMS_PER_POUND    = GRAMS_PER_POUND * MILLIGRAMS_PER_GRAM
     KILOGRAMS_PER_POUND     = GRAMS_PER_POUND * KILOGRAMS_PER_GRAM
     KILOGRAMS_PER_MILLIGRAM = MILLIGRAMS_PER_GRAM**2
+    FLUID_OUNCE_PER_OUNCE   = IDENTITY
 
     CONVERSIONS = {
       UNIT[:unit] => {
         UNIT[:unit] => [:*, IDENTITY]
       },
       UNIT[:gram] => {
-        UNIT[:gram]      => [:*, IDENTITY],
-        UNIT[:ounce]     => [:/, GRAMS_PER_OUNCE],
-        UNIT[:pound]     => [:/, GRAMS_PER_POUND],
-        UNIT[:milligram] => [:*, MILLIGRAMS_PER_GRAM],
-        UNIT[:kilogram]  => [:*, KILOGRAMS_PER_GRAM]
+        UNIT[:gram]        => [:*, IDENTITY],
+        UNIT[:ounce]       => [:/, GRAMS_PER_OUNCE],
+        UNIT[:pound]       => [:/, GRAMS_PER_POUND],
+        UNIT[:milligram]   => [:*, MILLIGRAMS_PER_GRAM],
+        UNIT[:kilogram]    => [:*, KILOGRAMS_PER_GRAM],
+        UNIT[:fluid_ounce] => [:*, IDENTITY]
       },
       UNIT[:ounce] => {
         UNIT[:gram]      => [:*, GRAMS_PER_OUNCE],
@@ -91,7 +93,8 @@ module Weighable
         UNIT[:kilogram]  => [:*, IDENTITY]
       },
       UNIT[:fluid_ounce] => {
-        UNIT[:fluid_ounce] => [:*, IDENTITY]
+        UNIT[:fluid_ounce] => [:*, IDENTITY],
+        UNIT[:gram]        => [:/, IDENTITY]
       }
     }.freeze
 
