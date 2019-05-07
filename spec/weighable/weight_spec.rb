@@ -4,7 +4,7 @@ require 'weighable/core_ext'
 module Weighable
   describe Weight do
     it 'should know all of the units' do
-      expect(Weight::UNIT).to eq(gram: 0, ounce: 1, pound: 2, milligram: 3, kilogram: 4, unit: 5)
+      expect(Weight::UNIT).to eq(gram: 0, ounce: 1, pound: 2, milligram: 3, kilogram: 4, unit: 5, fluid_ounce: 6)
     end
 
     context 'zero?' do
@@ -27,6 +27,7 @@ module Weighable
         expect(Weight.from_value_and_unit(1, 'unit')).to eq(Weight.new(1, :unit))
         expect(Weight.from_value_and_unit(1, 'ea')).to eq(Weight.new(1, :unit))
         expect(Weight.from_value_and_unit(1, 'Ounces')).to eq(Weight.new(1, :ounce))
+        expect(Weight.from_value_and_unit(1, 'fl oz')).to eq(Weight.new(1, :fluid_ounce))
       end
     end
 
@@ -136,6 +137,20 @@ module Weighable
           expect(Weight.parse('0.01 kilograms')).to eq(Weight.new(0.01, :kilogram))
         end
       end
+
+      context 'for fluid ounce' do
+        it 'returns the correct weight' do
+          expect(Weight.parse('1.2 fl oz')).to eq(Weight.new(1.2, :fluid_ounce))
+        end
+
+        it 'returns the correct weight with fluid ounce' do
+          expect(Weight.parse('1.2 fluid ounce')).to eq(Weight.new(1.2, :fluid_ounce))
+        end
+
+        it 'returns the correct weight with fluid ounces' do
+          expect(Weight.parse('1.2 fluid ounces')).to eq(Weight.new(1.2, :fluid_ounce))
+        end
+      end
     end
 
     context 'to_s' do
@@ -178,6 +193,13 @@ module Weighable
         it 'returns a nice string' do
           expect(Weight.new(1, :kilogram).to_s).to eq('1 kg')
           expect(Weight.new(1, :kilogram).to_s(only_unit: true)).to eq('kg')
+        end
+      end
+
+      context 'for fluid ounce' do
+        it 'returns a nice string' do
+          expect(Weight.new(1, :fluid_ounce).to_s).to eq('1 fl oz')
+          expect(Weight.new(1, :fluid_ounce).to_s(only_unit: true)).to eq('fl oz')
         end
       end
     end
@@ -440,6 +462,7 @@ module Weighable
           expect(weight.is_milligrams?).to eq(false)
           expect(weight.is_kilogram?).to eq(false)
           expect(weight.is_kilograms?).to eq(false)
+          expect(weight.is_fluid_ounces?).to eq(false)
         end
       end
 
@@ -459,6 +482,7 @@ module Weighable
           expect(weight.is_milligrams?).to eq(false)
           expect(weight.is_kilogram?).to eq(false)
           expect(weight.is_kilograms?).to eq(false)
+          expect(weight.is_fluid_ounces?).to eq(false)
         end
       end
 
@@ -478,6 +502,7 @@ module Weighable
           expect(weight.is_milligrams?).to eq(false)
           expect(weight.is_kilogram?).to eq(false)
           expect(weight.is_kilograms?).to eq(false)
+          expect(weight.is_fluid_ounces?).to eq(false)
         end
       end
 
@@ -497,6 +522,7 @@ module Weighable
           expect(weight.is_milligrams?).to eq(false)
           expect(weight.is_kilogram?).to eq(false)
           expect(weight.is_kilograms?).to eq(false)
+          expect(weight.is_fluid_ounces?).to eq(false)
         end
       end
 
@@ -516,6 +542,7 @@ module Weighable
           expect(weight.is_milligrams?).to eq(true)
           expect(weight.is_kilogram?).to eq(false)
           expect(weight.is_kilograms?).to eq(false)
+          expect(weight.is_fluid_ounces?).to eq(false)
         end
       end
 
@@ -535,6 +562,7 @@ module Weighable
           expect(weight.is_milligrams?).to eq(false)
           expect(weight.is_kilogram?).to eq(true)
           expect(weight.is_kilograms?).to eq(true)
+          expect(weight.is_fluid_ounces?).to eq(false)
         end
       end
     end
@@ -580,6 +608,13 @@ module Weighable
       it 'does not convert to unit' do
         expect { weight.to(:unit) }.to raise_error(NoConversionError)
       end
+
+      it 'converts to fluid ounce' do
+        fluid_ounce = BigDecimal.new('1') / BigDecimal.new('28.34952')
+        expect(weight.to(:fluid_ounce)).to eq(Weight.new(fluid_ounce, :fluid_ounce))
+        expect(weight.to_fluid_ounce).to eq(Weight.new(fluid_ounce, :fluid_ounce))
+        expect(weight.to(:fluid_ounce).value.round(9)).to eq(BigDecimal.new('0.035273966'))
+      end
     end
 
     context 'from ounce' do
@@ -622,6 +657,13 @@ module Weighable
 
       it 'does not convert to unit' do
         expect { weight.to(:unit) }.to raise_error(NoConversionError)
+      end
+
+      it 'converts to fluid ounce' do
+        fluid_ounce = BigDecimal.new('1')
+        expect(weight.to(:fluid_ounce)).to eq(Weight.new(fluid_ounce, :fluid_ounce))
+        expect(weight.to_fluid_ounce).to eq(Weight.new(fluid_ounce, :fluid_ounce))
+        expect(weight.to(:fluid_ounce).value.round(9)).to eq(BigDecimal.new('1'))
       end
     end
 
@@ -666,6 +708,13 @@ module Weighable
       it 'does not convert to unit' do
         expect { weight.to(:unit) }.to raise_error(NoConversionError)
       end
+
+      it 'converts to fluid ounce' do
+        fluid_ounce = BigDecimal.new('1') * BigDecimal.new('16')
+        expect(weight.to(:fluid_ounce)).to eq(Weight.new(fluid_ounce, :fluid_ounce))
+        expect(weight.to_fluid_ounce).to eq(Weight.new(fluid_ounce, :fluid_ounce))
+        expect(weight.to(:fluid_ounce).value.round(9)).to eq(BigDecimal.new('16'))
+      end
     end
 
     context 'from milligram' do
@@ -708,6 +757,13 @@ module Weighable
 
       it 'does not convert to unit' do
         expect { weight.to(:unit) }.to raise_error(NoConversionError)
+      end
+
+      it 'converts to fluid ounce' do
+        fluid_ounce = BigDecimal.new('1') / BigDecimal.new('28349.52')
+        expect(weight.to(:fluid_ounce)).to eq(Weight.new(fluid_ounce, :fluid_ounce))
+        expect(weight.to_fluid_ounce).to eq(Weight.new(fluid_ounce, :fluid_ounce))
+        expect(weight.to(:fluid_ounce).value.round(9)).to eq(BigDecimal.new('0.000035274'))
       end
     end
 
@@ -752,6 +808,13 @@ module Weighable
       it 'does not convert to unit' do
         expect { weight.to(:unit) }.to raise_error(NoConversionError)
       end
+
+      it 'converts to fluid ounce' do
+        fluid_ounce = BigDecimal.new('1') / BigDecimal.new('0.02834952')
+        expect(weight.to(:fluid_ounce)).to eq(Weight.new(fluid_ounce, :fluid_ounce))
+        expect(weight.to_fluid_ounce).to eq(Weight.new(fluid_ounce, :fluid_ounce))
+        expect(weight.to(:fluid_ounce).value.round(9)).to eq(BigDecimal.new('35.273965838'))
+      end
     end
 
     context 'from unit' do
@@ -777,11 +840,65 @@ module Weighable
         expect { weight.to(:kilogram) }.to raise_error(NoConversionError)
       end
 
+      it 'does not convert to fluid ounce' do
+        expect { weight.to(:fluid_ounce)}.to raise_error(NoConversionError)
+      end
+
       it 'converts to unit' do
         unit = BigDecimal.new('1')
         expect(weight.to(:unit)).to eq(Weight.new(unit, :unit))
         expect(weight.to_unit).to eq(Weight.new(unit, :unit))
         expect(weight.to(:unit).value.round(9)).to eq(BigDecimal.new('1'))
+      end
+    end
+
+    context 'from fluid ounce' do
+      let(:weight) { Weight.new(1, :fluid_ounce) }
+
+      it 'converts to gram' do
+        gram = BigDecimal.new('1') * BigDecimal.new('28.34952')
+        expect(weight.to(:gram)).to eq(Weight.new(gram, :gram))
+        expect(weight.to_gram).to eq(Weight.new(gram, :gram))
+        expect(weight.to(:gram).value.round(9)).to eq(BigDecimal.new('28.34952'))
+      end
+
+      it 'converts to ounce with identity' do
+        unit = BigDecimal.new('1')
+        expect(weight.to(:ounce)).to eq(Weight.new(unit, :ounce))
+        expect(weight.to_ounce).to eq(Weight.new(unit, :ounce))
+        expect(weight.to(:ounce).value.round(9)).to eq(BigDecimal.new('1'))
+      end
+
+      it 'converts to pound' do
+        pound = BigDecimal.new('1') / BigDecimal.new('16')
+        expect(weight.to(:pound)).to eq(Weight.new(pound, :pound))
+        expect(weight.to_pound).to eq(Weight.new(pound, :pound))
+        expect(weight.to(:pound).value.round(9)).to eq(BigDecimal.new('0.0625'))
+      end
+
+      it 'converts to milligram' do
+        milligram = BigDecimal.new('1') * BigDecimal.new('28349.52')
+        expect(weight.to(:milligram)).to eq(Weight.new(milligram, :milligram))
+        expect(weight.to_milligram).to eq(Weight.new(milligram, :milligram))
+        expect(weight.to(:milligram).value.round(9)).to eq(BigDecimal.new('28349.52'))
+      end
+
+      it 'converts to kilogram' do
+        kilogram = BigDecimal.new('1') * BigDecimal.new('0.02834952')
+        expect(weight.to(:kilogram)).to eq(Weight.new(kilogram, :kilogram))
+        expect(weight.to_kilogram).to eq(Weight.new(kilogram, :kilogram))
+        expect(weight.to(:kilogram).value.round(9)).to eq(BigDecimal.new('0.02834952'))
+      end
+
+      it 'does not convert to unit' do
+        expect { weight.to(:unit)}.to raise_error(NoConversionError)
+      end
+
+      it 'converts to fluid ounce' do
+        unit = BigDecimal.new('1')
+        expect(weight.to(:fluid_ounce)).to eq(Weight.new(unit, :fluid_ounce))
+        expect(weight.to_fluid_ounce).to eq(Weight.new(unit, :fluid_ounce))
+        expect(weight.to(:fluid_ounce).value.round(9)).to eq(BigDecimal.new('1'))
       end
     end
   end
