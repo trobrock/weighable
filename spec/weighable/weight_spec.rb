@@ -54,6 +54,14 @@ module Weighable
         it 'returns the correct weight with no abbreviation' do
           expect(Weight.parse('1')).to eq(Weight.new(1, :unit))
         end
+        
+        it 'returns the correct weight with trailing space' do
+          expect(Weight.parse('1 ')).to eq(Weight.new(1, :unit))
+        end
+
+        it 'returns the correct unit with leading space' do
+          expect(Weight.parse(' 1 ')).to eq(Weight.new(1, :unit))
+        end
 
         it 'returns the correct weight with ea' do
           expect(Weight.parse('1 ea')).to eq(Weight.new(1, :unit))
