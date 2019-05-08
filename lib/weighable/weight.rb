@@ -107,19 +107,20 @@ module Weighable
     }.freeze
 
     def self.parse(string)
-      unit_start = string.index(' ')
+      trimmed = string.strip
+      unit_start = trimmed.index(' ')
       if unit_start
-        unit = string.slice!(unit_start + 1..-1)
-        value = string.slice!(0..unit_start - 1)
+        unit = trimmed.slice!(unit_start + 1..-1)
+        value = trimmed.slice!(0..unit_start - 1)
         from_value_and_unit(value, unit)
       else
-        from_value_and_unit(string, nil)
+        from_value_and_unit(trimmed, nil)
       end
     end
 
     def self.from_value_and_unit(value, unit)
       unit = parse_unit(unit)
-      fail ArgumentError, 'invalid weight' if unit.nil? || value.nil?
+      fail ArgumentError, 'invalid weight' if unit.nil? || value.to_s.strip.empty?
       Weight.new(value, unit)
     end
 
