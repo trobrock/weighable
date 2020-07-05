@@ -1,4 +1,6 @@
 source 'https://rubygems.org'
 
+gem 'activesupport', '> 4.2.4', '< 5'
+
 # Specify your gem's dependencies in weighable.gemspec
 gemspec
